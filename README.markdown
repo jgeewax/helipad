@@ -229,7 +229,7 @@ your application is and `import helipad`.
     api_version: 1
 
     handlers:
-    - url: /about/
+    - url: /about/.*
       script: yourapp/handlers/about.py
 
 #### yourapp/handlers/about.py

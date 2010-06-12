@@ -13,17 +13,26 @@ your application is and `import helipad`.
 
 ### Take a look at the sample application
 
-http://github.com/jgeewax/helipad/tree/master/sample-app/yourapp/handlers/
+[sample-app/yourapp/handlers/](http://github.com/jgeewax/helipad/tree/master/sample-app/yourapp/handlers/)
 
-### Hello helipad!
+### Basic request handlers
 
-#### app.yaml
+`app.yaml`
 
     handlers:
     - url: /helloworld/
       script: yourapp/handlers/helloworld.py
+    
+    - url: /pages/.*
+      script: yourapp/handlers/pages.py
+    
+    - url: /pages-prefixed/.*
+      script: yourapp/handlers/pages_prefixed.py
+    
+    - url: /pages-unordered/.*
+      script: yourapp/handlers/pages_unordered.py
 
-#### yourapp/handlers/helloworld.py:
+`yourapp/handlers/helloworld.py`
 
     import helipad
 
@@ -36,15 +45,8 @@ http://github.com/jgeewax/helipad/tree/master/sample-app/yourapp/handlers/
     if __name__ == "__main__":
       main()
 
-### Multiple handlers in one file:
 
-#### app.yaml
-
-    handlers:
-    - url: /pages/.*
-      script: yourapp/handlers/pages.py
-
-#### yourapp/handlers/pages.py
+`yourapp/handlers/pages.py`
 
     import helipad
 
@@ -64,15 +66,7 @@ http://github.com/jgeewax/helipad/tree/master/sample-app/yourapp/handlers/
     if __name__ == "__main__":
       main()
 
-### Multiple handlers in one file, with prefixes:
-
-#### app.yaml
-
-    handlers:
-    - url: /pages/.*
-      script: yourapp/handlers/pages.py
-
-#### yourapp/handlers/pages.py
+`yourapp/handlers/pages_prefixed.py`
 
     import helipad
 
@@ -84,7 +78,7 @@ http://github.com/jgeewax/helipad/tree/master/sample-app/yourapp/handlers/
       def get(self):
         self.response.out.write('Hello, helipad! This is Page2')
 
-    main, application = helipad.app('/pages/', [
+    main, application = helipad.app('/pages-prefixed/', [
       ('page1/', Page1),
       ('page2/', Page2),
     ])
@@ -92,15 +86,7 @@ http://github.com/jgeewax/helipad/tree/master/sample-app/yourapp/handlers/
     if __name__ == "__main__":
       main()
 
-### Sometimes the URL order doesn't matter...
-
-#### app.yaml
-
-    handlers:
-    - url: /pages/.*
-      script: yourapp/handlers/pages.py
-
-#### yourapp/handlers/pages.py
+`yourapp/handlers/pages_unordered.py`
 
     import helipad
 
@@ -112,7 +98,7 @@ http://github.com/jgeewax/helipad/tree/master/sample-app/yourapp/handlers/
       def get(self):
         self.response.out.write('Hello, helipad! This is Page2')
 
-    main, application = helipad.app('/pages/', {
+    main, application = helipad.app('/pages-unordered/', {
       'page1/': Page1,
       'page2/': Page2,
     })
@@ -120,17 +106,28 @@ http://github.com/jgeewax/helipad/tree/master/sample-app/yourapp/handlers/
     if __name__ == "__main__":
       main()
 
-### Serving a static file
+### Serving static files
 
-#### app.yaml
+Template should be put in `yourapp/tempates/about.html`
 
+`app.yaml`
+
+    application: yourapp
+    version: 1
+    runtime: python
+    api_version: 1
+    
     handlers:
     - url: /about/
       script: yourapp/handlers/about.py
+    
+    - url: /about-shortcut/
+      script: yourapp/handlers/about_shortcut.py
+    
+    - url: /about-multiple/.*
+      script: yourapp/handlers/about_multiple.py
 
-#### yourapp/handlers/about.py
-
-Template should be put in `yourapp/tempates/about.html`
+`yourapp/handlers/about.py`
 
     import helipad
 
@@ -146,15 +143,7 @@ Template should be put in `yourapp/tempates/about.html`
     if __name__ == "__main__":
       main()
 
-### Serving a static file even easier!
-
-#### app.yaml
-
-    handlers:
-    - url: /about/
-      script: yourapp/handlers/about.py
-
-#### yourapp/handlers/about.py
+`yourapp/handlers/about_shortcut.py`
 
     import helipad
 
@@ -163,22 +152,18 @@ Template should be put in `yourapp/tempates/about.html`
     if __name__ == "__main__":
       main()
 
-### Serving multiple static pages
 
-#### app.yaml
-
-    handlers:
-    - url: /about/.*
-      script: yourapp/handlers/about.py
-
-#### yourapp/handlers/about.py
+`yourapp/handlers/about_multiple.py`
 
     import helipad
 
-    main, application = helipad.root('yourapp').static('/about/', {
+    main, application = helipad.root('yourapp').static('/about-multiple/', {
       '':          'templates/about.html',
       'company/':  'templates/about_company.html',
     })
 
     if __name__ == "__main__":
       main()
+    
+    
+

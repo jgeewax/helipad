@@ -3,7 +3,7 @@
 # Copyright (C) 2010 JJ Geewax http://geewax.org/
 # All rights reserved.
 # 
-# This software is licensed as described in the file COPYING,
+# This software is licensed as described in the file COPYING.txt,
 # which you should have received as part of this distribution.
 
 # ==============================================================================
@@ -55,10 +55,13 @@ class Handler(webapp.RequestHandler):
       for line in f:
         self.response.out.write(line)
   
-  def template(self, path, params=None):
+  def render(self, path, params=None):
     env = self._get_template_environment()
     template = env.get_template(path)
-    self.response.out.write(template.render(params or {}))
+    return template.render(params or {})
+  
+  def template(self, path, params=None):
+    self.response.out.write(self.render(path, params))
   
   @classmethod
   def _get_template_environment(cls):

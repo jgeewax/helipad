@@ -55,10 +55,13 @@ class Handler(webapp.RequestHandler):
       for line in f:
         self.response.out.write(line)
   
-  def template(self, path, params=None):
+  def render(self, path, params=None):
     env = self._get_template_environment()
     template = env.get_template(path)
-    self.response.out.write(template.render(params or {}))
+    return template.render(params or {})
+  
+  def template(self, path, params=None):
+    self.response.out.write(self.render(path, params))
   
   @classmethod
   def _get_template_environment(cls):

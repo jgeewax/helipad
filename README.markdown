@@ -17,7 +17,7 @@ your application is and `import helipad`.
 
 ### Basic request handlers
 
-`app.yaml`
+#### app.yaml
 
     handlers:
     - url: /helloworld/
@@ -32,7 +32,7 @@ your application is and `import helipad`.
     - url: /pages-unordered/.*
       script: yourapp/handlers/pages_unordered.py
 
-`yourapp/handlers/helloworld.py`
+#### yourapp/handlers/helloworld.py
 
     import helipad
 
@@ -46,7 +46,7 @@ your application is and `import helipad`.
       main()
 
 
-`yourapp/handlers/pages.py`
+#### yourapp/handlers/pages.py
 
     import helipad
 
@@ -66,7 +66,7 @@ your application is and `import helipad`.
     if __name__ == "__main__":
       main()
 
-`yourapp/handlers/pages_prefixed.py`
+#### yourapp/handlers/pages_prefixed.py
 
     import helipad
 
@@ -86,7 +86,7 @@ your application is and `import helipad`.
     if __name__ == "__main__":
       main()
 
-`yourapp/handlers/pages_unordered.py`
+#### yourapp/handlers/pages_unordered.py
 
     import helipad
 
@@ -108,9 +108,9 @@ your application is and `import helipad`.
 
 ### Serving static files
 
-Template should be put in `yourapp/tempates/about.html`
+Templates should be put in `yourapp/tempates/`
 
-`app.yaml`
+#### app.yaml
 
     application: yourapp
     version: 1
@@ -127,7 +127,7 @@ Template should be put in `yourapp/tempates/about.html`
     - url: /about-multiple/.*
       script: yourapp/handlers/about_multiple.py
 
-`yourapp/handlers/about.py`
+#### yourapp/handlers/about.py
 
     import helipad
 
@@ -143,7 +143,7 @@ Template should be put in `yourapp/tempates/about.html`
     if __name__ == "__main__":
       main()
 
-`yourapp/handlers/about_shortcut.py`
+#### yourapp/handlers/about_shortcut.py
 
     import helipad
 
@@ -153,7 +153,7 @@ Template should be put in `yourapp/tempates/about.html`
       main()
 
 
-`yourapp/handlers/about_multiple.py`
+#### yourapp/handlers/about_multiple.py
 
     import helipad
 

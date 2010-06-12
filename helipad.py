@@ -1,3 +1,11 @@
+# This file is part of helipad (http://github.com/jgeewax/helipad).
+# 
+# Copyright (C) 2010 JJ Geewax http://geewax.org/
+# All rights reserved.
+# 
+# This software is licensed as described in the file COPYING.txt,
+# which you should have received as part of this distribution.
+
 # ==============================================================================
 # Imports
 # ==============================================================================

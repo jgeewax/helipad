@@ -11,14 +11,13 @@ has a few helpers that are just shorthand for things that you can do with `webap
 Getting started with helipad is simple. Put `helipad.py` file in the directory where
 your application is and `import helipad`.
 
+### Take a look at the sample application
+
+http://github.com/jgeewax/helipad/tree/master/sample-app/yourapp/handlers/
+
 ### Hello helipad!
 
 #### app.yaml
-
-    application: your-app-id
-    version: 1
-    runtime: python
-    api_version: 1
 
     handlers:
     - url: /helloworld/
@@ -40,11 +39,6 @@ your application is and `import helipad`.
 ### Multiple handlers in one file:
 
 #### app.yaml
-
-    application: your-app-id
-    version: 1
-    runtime: python
-    api_version: 1
 
     handlers:
     - url: /pages/.*
@@ -74,11 +68,6 @@ your application is and `import helipad`.
 
 #### app.yaml
 
-    application: your-app-id
-    version: 1
-    runtime: python
-    api_version: 1
-
     handlers:
     - url: /pages/.*
       script: yourapp/handlers/pages.py
@@ -106,11 +95,6 @@ your application is and `import helipad`.
 ### Sometimes the URL order doesn't matter...
 
 #### app.yaml
-
-    application: your-app-id
-    version: 1
-    runtime: python
-    api_version: 1
 
     handlers:
     - url: /pages/.*
@@ -140,16 +124,13 @@ your application is and `import helipad`.
 
 #### app.yaml
 
-    application: your-app-id
-    version: 1
-    runtime: python
-    api_version: 1
-
     handlers:
     - url: /about/
       script: yourapp/handlers/about.py
 
 #### yourapp/handlers/about.py
+
+Template should be put in `yourapp/tempates/about.html`
 
     import helipad
 
@@ -165,27 +146,9 @@ your application is and `import helipad`.
     if __name__ == "__main__":
       main()
 
-#### yourapp/tempates/about.html
-
-    <html>
-      <head>
-        <title>About</title>
-      </head>
-      
-      <body>
-        <h1>Welcome to the about page!</h1>
-        <p>Thanks for looking.</p>
-      </body>
-    </html>
-
 ### Serving a static file even easier!
 
 #### app.yaml
-
-    application: your-app-id
-    version: 1
-    runtime: python
-    api_version: 1
 
     handlers:
     - url: /about/
@@ -200,27 +163,9 @@ your application is and `import helipad`.
     if __name__ == "__main__":
       main()
 
-#### yourapp/tempates/about.html
-
-    <html>
-      <head>
-        <title>About</title>
-      </head>
-      
-      <body>
-        <h1>Welcome to the about page!</h1>
-        <p>Thanks for looking.</p>
-      </body>
-    </html>
-
 ### Serving multiple static pages
 
 #### app.yaml
-
-    application: your-app-id
-    version: 1
-    runtime: python
-    api_version: 1
 
     handlers:
     - url: /about/.*
@@ -237,30 +182,3 @@ your application is and `import helipad`.
 
     if __name__ == "__main__":
       main()
-
-#### yourapp/tempates/about.html
-
-    <html>
-      <head>
-        <title>About</title>
-      </head>
-      
-      <body>
-        <h1>Welcome to the about page!</h1>
-        <p>Thanks for looking.</p>
-      </body>
-    </html>
-
-#### yourapp/tempates/about_company.html
-
-    <html>
-      <head>
-        <title>About the company</title>
-      </head>
-      
-      <body>
-        <h1>Our company</h1>
-        <p>Our company is great! Thanks for looking.</p>
-      </body>
-    </html>
-

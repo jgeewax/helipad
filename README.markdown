@@ -1,5 +1,3 @@
-## What the hell is helipad?
-
 Helipad is a really simple "micro-framework" that makes it easy to do the stupid
 stuff really quickly on Google AppEngine.
 
@@ -10,12 +8,8 @@ built with `webapp` was more verbose than it needed to be. I figured that there
 must be a way to be a bit more terse without losing any clarity. This little file
 has a few helpers that are just shorthand for things that you can do with `webapp`.
 
-## Quickstart guide
-
 Getting started with helipad is simple. Put `helipad.py` file in the directory where
 your application is and `import helipad`.
-
-## Showcase
 
 ### Hello helipad!
 

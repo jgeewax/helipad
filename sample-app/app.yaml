@@ -13,3 +13,5 @@ handlers:
 - url: /projects/.*
   script: yourapp/handlers/projects.py
 
+- url: /template/
+  script: yourapp/handlers/template.py

@@ -12,8 +12,8 @@
 from __future__ import with_statement
 import inspect
 import os
+import sys
 import mimetypes
-
 from google.appengine.ext import webapp
 
 # ==============================================================================
@@ -30,6 +30,12 @@ from django.utils import simplejson as json
 # Private globals
 # ==============================================================================
 _ROOT_MODULE = None
+_TEMPLATE_ROOT = None
+
+# ==============================================================================
+# Set up zipimports
+# ==============================================================================
+sys.path.insert(0, os.path.join(os.path.dirname(__file__), 'jinja2'))
 
 # ==============================================================================
 # Classes
@@ -48,6 +54,22 @@ class Handler(webapp.RequestHandler):
     with open(file_name, 'r') as f:
       for line in f:
         self.response.out.write(line)
+  
+  def template(self, path, params=None):
+    env = self._get_template_environment()
+    template = env.get_template(path)
+    self.response.out.write(template.render(params or {}))
+  
+  @classmethod
+  def _get_template_environment(cls):
+    if not template_root():
+      raise ValueError, "Template root not set."
+    
+    from jinja2 import Environment, FileSystemLoader
+    
+    return Environment(loader=FileSystemLoader(
+      os.path.join(os.path.dirname(root().__file__), template_root())
+    ))
 
 class Application(object):
   def __init__(self, *args, **kwargs):
@@ -144,14 +166,29 @@ def root(module=None):
     return _ROOT_MODULE
   
   if isinstance(module, basestring):
+    components = module.split('.')
     module = __import__(module, globals(), locals(), [], -1)
+    
+    for component in components[1:]:
+      module = getattr(module, component)
   
   if inspect.ismodule(module):
     _ROOT_MODULE = module
   else:
     raise ValueError, "Invalid module: %s" % module
   
-  # Return a reference to this same module (so that we can string together method calls)
+  # Return a reference to this module (so that we can string together method calls)
+  return __import__('helipad', globals(), locals(), [], -1)
+
+def template_root(directory=None):
+  global _TEMPLATE_ROOT
+  
+  if directory is None:
+    return _TEMPLATE_ROOT
+  
+  _TEMPLATE_ROOT = directory
+  
+  # Return a reference to this module (so that we can string together method calls)
   return __import__('helipad', globals(), locals(), [], -1)
 
 def app(*args, **kwargs):
@@ -161,4 +198,3 @@ def app(*args, **kwargs):
 def static(*args, **kwargs):
   app = StaticApplication(*args, **kwargs)
   return app.main, app.application
-

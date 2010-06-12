@@ -3,7 +3,7 @@
 # Copyright (C) 2010 JJ Geewax http://geewax.org/
 # All rights reserved.
 # 
-# This software is licensed as described in the file COPYING.txt,
+# This software is licensed as described in the file COPYING,
 # which you should have received as part of this distribution.
 
 # ==============================================================================

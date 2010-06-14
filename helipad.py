@@ -33,22 +33,17 @@ _ROOT_MODULE = None
 _TEMPLATE_ROOT = None
 
 # ==============================================================================
-# Set up zipimports
-# ==============================================================================
-sys.path.insert(0, os.path.join(os.path.dirname(__file__), 'jinja2'))
-
-# ==============================================================================
 # Classes
 # ==============================================================================
 
 class Handler(webapp.RequestHandler):
   def static(self, path):
-    file_name = os.path.join(os.path.dirname(root().__file__), path)
+    file_name = find_file(path)
     
     # Try to guess the content type:
-    type, _ = mimetypes.guess_type(file_name)
-    if type:
-      self.response.headers['Content-Type'] = type
+    file_type, _ = mimetypes.guess_type(file_name)
+    if file_type:
+      self.response.headers['Content-Type'] = file_type
     
     # Write the file to the output stream
     with open(file_name, 'r') as f:
@@ -67,6 +62,10 @@ class Handler(webapp.RequestHandler):
   def _get_template_environment(cls):
     if not template_root():
       raise ValueError, "Template root not set."
+    
+    jinja_path = os.path.join(os.path.dirname(__file__), 'jinja2')
+    if jinja_path not in sys.path:
+      sys.path.insert(0, jinja_path)
     
     from jinja2 import Environment, FileSystemLoader
     
@@ -193,6 +192,12 @@ def template_root(directory=None):
   
   # Return a reference to this module (so that we can string together method calls)
   return __import__('helipad', globals(), locals(), [], -1)
+
+def open_file(path):
+  return open(find_file(path))
+
+def find_file(path):
+  return os.path.join(os.path.dirname(root().__file__), path)
 
 def app(*args, **kwargs):
   app = Application(*args, **kwargs)

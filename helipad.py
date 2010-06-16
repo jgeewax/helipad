@@ -57,6 +57,22 @@ class Handler(webapp.RequestHandler):
   
   def template(self, path, params=None):
     self.response.out.write(self.render(path, params))
+
+  def set_cookie(self, name, value='', path='/'):
+    self.response.headers.add_header(
+      'Set-Cookie',
+      '%s=%s; Path=%s' % (name, value, path),
+    )
+    self.request.cookies[name] = value
+
+  def get_cookie(self, name):
+    return self.request.cookies.get(name)
+  
+  def clear_cookie(self, name):
+    if name in request.cookies:
+      del self.request.cookies[name]
+    
+    self.set_cookie(name)
   
   @classmethod
   def _get_template_environment(cls):

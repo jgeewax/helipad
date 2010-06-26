@@ -69,7 +69,7 @@ class Handler(webapp.RequestHandler):
     return self.request.cookies.get(name)
   
   def clear_cookie(self, name):
-    if name in request.cookies:
+    if name in self.request.cookies:
       del self.request.cookies[name]
     
     self.set_cookie(name)

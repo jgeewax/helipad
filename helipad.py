@@ -29,6 +29,7 @@ from django.utils import simplejson as json
 # ==============================================================================
 # Private globals
 # ==============================================================================
+_DEBUG = None
 _ROOT_MODULE = None
 _TEMPLATE_ROOT = None
 
@@ -97,7 +98,7 @@ class Application(object):
   
   @classmethod
   def get_application(cls, url_mapping):
-    return webapp.WSGIApplication(url_mapping)
+    return webapp.WSGIApplication(url_mapping, debug=debug())
   
   @classmethod
   def get_main_method(cls, application):
@@ -170,6 +171,20 @@ class StaticApplication(Application):
 # ==============================================================================
 # Functions
 # ==============================================================================
+
+def debug(value=None):
+  """
+  Sets the debug flag for helipad applications.
+  """
+  global _DEBUG
+  
+  if value is None:
+    return _DEBUG
+  
+  _DEBUG = bool(value)
+  
+  # Return a reference to this module (so that we can string together method calls)
+  return __import__('helipad', globals(), locals(), [], -1)
 
 def root(module=None):
   """

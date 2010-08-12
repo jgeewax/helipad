@@ -15,6 +15,7 @@ import os
 import sys
 import mimetypes
 from google.appengine.ext import webapp
+from google.appengine.api import memcache
 
 # ==============================================================================
 # Exports
@@ -38,6 +39,8 @@ _TEMPLATE_ROOT = None
 # ==============================================================================
 
 class Handler(webapp.RequestHandler):
+  SESSION_COOKIE_NAME = 'session_id'
+  
   def static(self, path):
     file_name = find_file(path)
     
@@ -58,6 +61,17 @@ class Handler(webapp.RequestHandler):
   
   def template(self, path, params=None):
     self.response.out.write(self.render(path, params))
+  
+  @property
+  def session(self):
+    key = self.get_cookie(self.SESSION_COOKIE_NAME)
+    session = Session(key)
+    
+    # If we had to create a new session, set the cookie so it persists
+    if not key:
+      self.set_cookie(self.SESSION_COOKIE_NAME, session.key)
+    
+    return session
 
   def set_cookie(self, name, value='', path='/'):
     self.response.headers.add_header(
@@ -167,6 +181,36 @@ class StaticApplication(Application):
       def get(self):
         self.static(path)
     return StaticHandler
+
+class Session(object):
+  _key = None
+  cache = memcache
+  
+  def __init__(self, session_key=None):
+    if not session_key:
+      session_key = self.get_random_key()
+    
+    self._key = session_key
+  
+  @classmethod
+  def get_random_key(cls):
+    import time, random, string
+    timestamp_string = str(time.time())
+    random_string = ''.join(random.choice(string.letters + string.digits) for _ in xrange(10))
+    return random_string + timestamp_string.replace('.', '')
+  
+  @property
+  def key(self):
+    return self._key
+  
+  def get(self, key):
+    return self.cache.get(key, namespace=self.key)
+  
+  def set(self, key, value):
+    return self.cache.set(key, value, namespace=self.key)
+  
+  def delete(self, key):
+    return self.cache.delete(key, namespace=self.key)
 
 # ==============================================================================
 # Functions

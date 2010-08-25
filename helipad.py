@@ -20,8 +20,8 @@ from google.appengine.api import memcache
 # ==============================================================================
 # Exports
 # ==============================================================================
-__all__ = ['VERSION', 'json', 'Handler', 'root', 'app', 'static']
-VERSION = (0, 1, 2)
+__all__ = ['app', 'debug', 'find_file', 'Handler', 'json', 'open_file', 'root',
+           'static', 'template_root', 'VERSION']
 
 # ==============================================================================
 # Convenience imports
@@ -34,6 +34,11 @@ from django.utils import simplejson as json
 _DEBUG = None
 _ROOT_MODULE = None
 _TEMPLATE_ROOT = None
+
+# ==============================================================================
+# Public globals
+# ==============================================================================
+VERSION = (0, 1, 2)
 
 # ==============================================================================
 # Classes

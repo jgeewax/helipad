@@ -274,8 +274,8 @@ def template_root(directory=None):
   # Return a reference to this module (so that we can string together method calls)
   return __import__('helipad', globals(), locals(), [], -1)
 
-def open_file(path):
-  return open(find_file(path))
+def open_file(path, mode='r'):
+  return open(find_file(path), mode)
 
 def find_file(path):
   return os.path.join(os.path.dirname(root().__file__), path)

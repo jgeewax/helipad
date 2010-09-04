@@ -16,12 +16,14 @@ import sys
 import mimetypes
 from google.appengine.ext import webapp
 from google.appengine.api import memcache
+from google.appengine.ext.webapp import blobstore_handlers
 
 # ==============================================================================
 # Exports
 # ==============================================================================
-__all__ = ['app', 'debug', 'find_file', 'Handler', 'json', 'open_file', 'root',
-           'static', 'template_root', 'VERSION']
+__all__ = ['app', 'BlobstoreDownloadHandler', 'BlobstoreUploadHandler', 'debug',
+           'find_file', 'Handler', 'json', 'open_file', 'root', 'static',
+           'template_root', 'VERSION']
 
 # ==============================================================================
 # Convenience imports
@@ -44,7 +46,7 @@ VERSION = (0, 1, 2)
 # Classes
 # ==============================================================================
 
-class Handler(webapp.RequestHandler):
+class HandlerMixin(object):
   SESSION_COOKIE_NAME = 'session_id'
   
   def static(self, path):
@@ -109,6 +111,15 @@ class Handler(webapp.RequestHandler):
     return Environment(loader=FileSystemLoader(
       os.path.join(os.path.dirname(root().__file__), template_root())
     ))
+
+class Handler(HandlerMixin, webapp.RequestHandler):
+  pass
+
+class BlobstoreDownloadHandler(HandlerMixin, blobstore_handlers.BlobstoreDownloadHandler):
+  pass
+
+class BlobstoreUploadHandler(HandlerMixin, blobstore_handlers.BlobstoreUploadHandler):
+  pass
 
 class Application(object):
   def __init__(self, *args, **kwargs):

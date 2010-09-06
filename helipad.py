@@ -62,8 +62,9 @@ class HandlerMixin(object):
       for line in f:
         self.response.out.write(line)
   
-  def render(self, path, params=None):
-    env = self._get_template_environment()
+  @classmethod
+  def render(cls, path, params=None):
+    env = cls._get_template_environment()
     template = env.get_template(path)
     return template.render(params or {})
   
